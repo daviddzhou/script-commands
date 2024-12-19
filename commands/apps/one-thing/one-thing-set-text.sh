@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Note: One Thing v1.2.1 required
+# Note: One Thing required
 # Install via Mac App Store: https://apps.apple.com/app/id1604176982
 
 # Required parameters:

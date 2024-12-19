@@ -10,7 +10,7 @@
 # @raycast.packageName Developer Utils
 #
 # Optional parameters:
-# @raycast.icon 🩺
+# @raycast.icon 🌐
 # @raycast.argument1 { "type": "text", "placeholder": "Website" }
 #
 # Documentation:
@@ -23,7 +23,19 @@ if ! command -v jq &> /dev/null; then
   exit 1;
 fi
 
-status_code=$(curl --silent "https://isitup.org/$1.json" | jq '.status_code')
+# Get the url from the user input
+url=$1
+
+# Remove any protocol prefix (http:// or https://)
+url=${url#*://}
+
+# Remove any www. prefix
+url=${url#www.}
+
+# Remove any trailing slash
+url=${url%/}
+
+status_code=$(curl --silent "https://isitup.org/${url}.json" | jq '.status_code')
 
 # Sample output:
 #
@@ -37,16 +49,16 @@ status_code=$(curl --silent "https://isitup.org/$1.json" | jq '.status_code')
 # }
 
 case $status_code in
-  1) echo "Up: $1"
+  1) echo "$1 is up!"
      exit 0
      ;;
-  2) echo "Down: $1"
+  2) echo "$1 is down."
      exit 0
      ;;
   3) echo "Invalid domain: $1"
      exit 1
      ;;
-  *) echo "Unknown status code ($status_code): $1"
+  *) echo "Error: unknown status code ($status_code): $1"
      exit 1
      ;;
 esac
